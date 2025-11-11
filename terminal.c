@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <termios.h>
+#include <sys/select.h>
 #define MX_IMPLEMENTATION
 #include "mathx.h"
 
@@ -87,20 +88,28 @@ void rd_canvas_to_terminal(){
   
 }
 
-bool poll_char(char c){
-  struct termios oldt, newt;
-  tcgetattr(STDIN_FILENO, &oldt);
-  newt = oldt;
-  newt.c_lflag &= ~(ICANON|ECHO);
-  tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+bool poll_char(char c) {
+    struct termios oldt, newt;
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
 
-  bool quit = false;
+    bool quit = false;
+    
+    struct timeval tv = {0L, 0L};
+    fd_set fds;
+    FD_ZERO(&fds);
+    FD_SET(STDIN_FILENO, &fds);
 
-  uint8_t ch = getchar();
-  tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-  //printf("pressed %c\n", ch);
-  if (ch == c) quit = true;
-  return quit;
+    int ret = select(STDIN_FILENO + 1, &fds, NULL, NULL, &tv);
+    if (ret > 0 && FD_ISSET(STDIN_FILENO, &fds)) {
+        int ch = getchar();
+        if (ch == c) quit = true;
+    }
+ 
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    return quit;
 }
 
 void canvas_to_term(rd_canvas *c){
@@ -145,7 +154,11 @@ int main(void){
     rd_draw_rect(&canva, 30, 20, rec1.x, rec1.y, rd_red);
     rd_draw_rect(&canva, 10, 20, 40, 60, rd_green);
     canvas_to_term(&canva);
-    if (poll_char('d')) Vec2transformP(&rec2, 40*dt, 0);
+    
+    if (poll_char('d')) Vec2transformP(&rec2, 40*dt, 0*dt);
+    else if (poll_char('a')) Vec2transformP(&rec2, -40*dt, 0*dt);
+    else if (poll_char('w')) Vec2transformP(&rec2, 0*dt, 20*dt);
+    else if (poll_char('s')) Vec2transformP(&rec2, 0*dt, -20*dt);
   }
   // canvas_to_term(&canva);
   // rd_canvas_to_ppm(&canva, "image.ppm");
