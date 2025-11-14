@@ -27,6 +27,14 @@ typedef struct {
 } mt_Vec2;
 #endif
 
+
+
+#ifndef RD_ALLOC
+#include <stdlib.h>
+#define RD_ALLOC(size) malloc(size)
+#endif
+
+
 static rd_color rd_grey = {.r=0x18, .g=0x18, .b=0x18, .a=0xFF};
 static rd_color rd_red = {.r=0xFF, .g=0x00, .b=0x00, .a=0xFF};
 static rd_color rd_white = {.r=0xFF, .g=0xFF, .b=0xFF, .a=0xFF};
@@ -65,7 +73,7 @@ static inline rd_color uint32_to_rd_color(uint32_t rgba){
 void rd_init_canvas(rd_canvas *c, size_t w, size_t h){
   c->width  = w;
   c->height = h;
-  c->pixels = malloc(sizeof(uint32_t) * h * w); 
+  c->pixels = RD_ALLOC(sizeof(uint32_t) * h * w); 
 }
 
 void rd_fill_background(rd_canvas *c, rd_color col){

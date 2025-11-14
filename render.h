@@ -2,7 +2,11 @@ typedef unsigned long size_t;
 typedef unsigned char uint8_t;
 typedef unsigned int uint32_t;
 
+
+#ifndef RD_ALLOC
 #include <stdlib.h>
+#define RD_ALLOC(size) malloc(size)
+#endif
 
 typedef struct {
   size_t   width;
@@ -60,7 +64,7 @@ static inline rd_color uint32_to_rd_color(uint32_t rgba){
 void rd_init_canvas(rd_canvas *c, size_t w, size_t h){
   c->width  = w;
   c->height = h;
-  c->pixels = malloc(sizeof(uint32_t) * h * w); 
+  c->pixels = RD_ALLOC(sizeof(uint32_t) * h * w); 
 }
 
 void rd_fill_background(rd_canvas *c, rd_color col){

@@ -11,7 +11,20 @@
 #define WIDTH 800
 #define HEIGHT 600
 
-#define FPS 200 
+#define FPS 200
+
+static unsigned char heap[1024 * 1024];
+static size_t heap_pos = 0;
+
+void *my_malloc(size_t size) {
+  if (heap_pos + size > sizeof(heap)) return 0;
+  void *p = &heap[heap_pos];
+  heap_pos += size;
+  return p;
+}
+
+#undef RD_ALLOC
+#define RD_ALLOC(size) my_malloc(size)
 
 int main(void){
   rd_canvas canva = {0};
