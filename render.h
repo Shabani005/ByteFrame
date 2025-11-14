@@ -2,7 +2,6 @@ typedef unsigned long size_t;
 typedef unsigned char uint8_t;
 typedef unsigned int uint32_t;
 
-
 #ifndef RD_ALLOC
 #include <stdlib.h>
 #define RD_ALLOC(size) malloc(size)
@@ -39,9 +38,6 @@ static rd_color uint32_to_rd_color(uint32_t rgba);
 void rd_init_canvas(rd_canvas *c, size_t w, size_t h);
 void rd_fill_background(rd_canvas *c, rd_color col);
 void rd_draw_rect(rd_canvas *c, size_t w, size_t h, size_t x, size_t y, rd_color col);
-void rd_canvas_to_ppm(rd_canvas *c, const char *filename);
-uint8_t rd_poll_key_terminal();
-void rd_canvas_to_terminal(rd_canvas *c);
 void rd_draw_pixel(rd_canvas *c, size_t x, size_t y, rd_color color);
 void rd_draw_triangle(rd_canvas *c, mt_Vec2 v1, mt_Vec2 v2, mt_Vec2 v3, rd_color col);
 float rd_solve_y(mt_Vec2 a, mt_Vec2 b, float x);
