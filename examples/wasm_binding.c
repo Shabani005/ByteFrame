@@ -18,26 +18,35 @@ void *my_malloc(size_t size) {
 #undef RD_ALLOC
 #define RD_ALLOC(size) my_malloc(size) 
 
-#include "../render.h"
+#include "render.h"
 
 
 __attribute__((export_name("make_canvas")))
 rd_canvas* make_canvas(size_t w, size_t h) {
   rd_canvas* c = RD_ALLOC(sizeof(rd_canvas));
   rd_init_canvas(c, w, h);
-  rd_fill_background(c, rd_red);
   return c;
 }
 
-__attribute__((export_name("draw_demo")))
-void draw_demo(rd_canvas* c) {
-  rd_draw_rect(c, 50, 50, 10, 10, rd_blue);
+__attribute__((export_name("fill_background")))
+void fill_background(rd_canvas *c, uint32_t color){
+  rd_fill_background(c, rd_red); // TODO: unhardcode color
+}
 
-  mt_Vec2 t1 = {.x=100, .y=50};
-  mt_Vec2 t2 = {.x=200, .y=100};
-  mt_Vec2 t3 = {.x=300, .y=50};
+// __atribute__((export_name("js_draw_rect")))
+// void js_draw_rect(rd_canvas *c);
 
-  rd_draw_triangle(c, t1, t2, t3, rd_green);
+__attribute__((export_name("draw_rect")))
+void draw_rect(rd_canvas* c, size_t width, size_t height, size_t x, size_t y, uint32_t color) {
+  rd_draw_rect(c, width, height, x, y, rd_green);
+}
+
+__attribute__((export_name("draw_triangle")))
+void draw_triangle(rd_canvas *c, float x1, float y1, float x2, float y2, float x3, float y3, uint32_t color){
+  mt_Vec2 t1 = {.x=x1, .y=y1};
+  mt_Vec2 t2 = {.x=x2, .y=y2};
+  mt_Vec2 t3 = {.x=x3, .y=y3};
+  rd_draw_triangle(c, t1, t2, t3, uint32_to_rd_color(color));
 }
 
 __attribute__((export_name("canvas_pixels")))
