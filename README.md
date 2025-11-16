@@ -1,5 +1,5 @@
 Very Simplistic software rendering library written in C aiming to support as wide of a range of systems as possible (by not depending on C std lib).
-Done in a very stupid way, but its not supposed to be smart.
+Done in a very stupid way, but its not supposed to be smart so I guess its fine.
 
 Examples of how it can be used in terminal, web browser canvas (via WASM) and raylib as a window provider in the examples folder
 - To build Examples (requires raylib)
