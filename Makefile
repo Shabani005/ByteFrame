@@ -14,7 +14,6 @@ libbyteframe.so: folders byteframe.cpp
 folders:
 	mkdir -p lib/
 
-
 pong:
 	g++ ./examples/pongish.cpp -o pong -I./includes -L./lib -l:libbyteframe.a -lraylib -O3
 
