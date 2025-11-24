@@ -5,8 +5,10 @@
 #include <vector>
 #include <cstddef>
 
-namespace bf {
 
+namespace bf {
+	class Rectangle;
+	
 	struct Vec2 {
 		float x, y;
 	};
@@ -30,6 +32,7 @@ namespace bf {
 
 	class Canvas {
 	public:
+		Canvas();
 		Canvas(size_t w, size_t h);
 
 		void fill(Color col);
@@ -43,15 +46,65 @@ namespace bf {
 		void drawCircle(int cx, int cy, float r, Color col);
 		void drawVline(size_t start, size_t end, size_t x, size_t w, Color col);
 		void drawHline(size_t start, size_t end, size_t y, size_t w, Color col);
-		void drawTriangle(Vec2 v1, Vec2 v2, Vec2 v3, Color col);
+		void drawTriangle(bf::Vec2 v1, bf::Vec2 v2, bf::Vec2 v3, Color col);
 
 		uint32_t* data();
 
+
+	
+		
+
+	
 	private:
 		size_t width, height;
 		std::vector<uint32_t> pixels;
-		float rd_solve_y(Vec2 a, Vec2 b, float x);
+		float rd_solve_y(bf::Vec2 a, bf::Vec2 b, float x);
 	};
+
+
+
+	class Circle {
+		public:
+			Circle();
+			Circle(Vec2 pos, float r);
+
+			Vec2 getPos() const;
+			
+			float getRadius() const;
+
+
+			bool collidesWith(const Rectangle& rect) const;
+
+		private:
+			Vec2 position;
+			float radius;
+	};
+
+	
+	class Rectangle {
+		public:
+
+			Rectangle();
+			Rectangle(float x, float y, float w, float h, Color col);
+
+			float getX() const;
+
+			float getY() const;
+			float getW() const;
+	
+
+			float getH() const;
+
+			void draw(Canvas canva);
+			
+			bool collidesWith(const Rectangle& other) const;
+
+			bool collidesWith(const Circle& b) const;
+			
+		private:
+			float x, y, w, h;
+			Color col;
+		};	
 
 }
 #endif // BF_HPP

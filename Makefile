@@ -1,4 +1,4 @@
-all: libbyteframe.so libbyteframe.o libbyteframe.a example folders
+all: libbyteframe.so libbyteframe.o libbyteframe.a example folders pong
 
 
 libbyteframe.a: libbyteframe.o folders
@@ -13,6 +13,11 @@ libbyteframe.so: folders byteframe.cpp
 
 folders:
 	mkdir -p lib/
+
+
+pong:
+	g++ ./examples/pongish.cpp -o pong -I./includes -L./lib -l:libbyteframe.a -lraylib -O3
+
 
 example:
 	g++ ./examples/example.cpp -o example -I./includes -L./lib -l:libbyteframe.a -lraylib -O3

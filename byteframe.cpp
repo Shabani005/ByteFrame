@@ -3,7 +3,8 @@
 #include <cstdio>
 #include <cmath>
 #include <iostream>
-#include <string>         
+#include <string>    
+#include <algorithm>
 
 namespace bf {
 
@@ -307,5 +308,90 @@ namespace bf {
         float slope = (b.y - a.y) / (b.x - a.x);
         return a.y + slope * (x - a.x);
     }
+
+    
+
+
+    Circle::Circle() : position(Vec2()), radius(0.0f) {}
+    Circle::Circle(Vec2 pos, float r) : position(pos), radius(r) {} 
+      // void draw(Canvas canva){
+      //   canva.drawCircle(position)
+      // }
+
+			Vec2 Circle::getPos() const {
+				return position;
+			}
+			
+			float Circle::getRadius() const {
+				return radius;
+			}
+
+
+		  bool Circle::collidesWith(const Rectangle& rect) const {
+			  return rect.collidesWith(*this);
+		  }
+
+		// private:
+		// 	Vec2 position;
+		// 	float radius;
+		//
+
+	
+      Rectangle::Rectangle() : x(0), y(0), w(0), h(0), col(Color()) {}
+      Rectangle::Rectangle(float x, float y, float w, float h, Color col) : x(x), y(y), w(w), h(h), col(col) {}
+
+			float Rectangle::getX() const {
+				return x;
+			}
+
+			float Rectangle::getY() const {
+				return y;
+			}
+
+			float Rectangle::getW() const {
+				return w;
+			}
+
+			float Rectangle::getH() const {
+				return h;
+			}
+
+			void Rectangle::draw(Canvas canva){
+				canva.drawRect(w, h, x, y, col);
+			}
+			
+			bool Rectangle::collidesWith(const Rectangle& other) const {
+				if (x < other.x + other.w &&
+						x + w > other.w &&
+						y < other.y + other.h &&
+						y + h > other.y) return true;
+				return false;
+			}
+
+			bool Rectangle::collidesWith(const Circle& b) const {
+    		float px = x;
+    		float py = y;
+    		float pw = w;
+    		float ph = h;
+
+    
+    		float closestX = std::max(px, std::min(b.getPos().x, px + pw));
+    		float closestY = std::max(py, std::min(b.getPos().y, py + ph));
+
+    		float dx = b.getPos().x - closestX;
+    		float dy = b.getPos().y - closestY;
+    		float dist2 = dx * dx + dy * dy;
+
+    		return dist2 <= b.getRadius() * b.getRadius();
+			}
+			
+		// private:
+		// 	float x, y, w, h;
+		// 	Color col;
+		//
+						
+
+
+
 
 }
