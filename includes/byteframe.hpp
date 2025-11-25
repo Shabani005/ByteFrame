@@ -66,8 +66,10 @@ namespace bf {
 	class Circle {
 		public:
 			Circle();
-			Circle(Vec2 pos, float r);
+			Circle(Vec2 pos, float r, Color col);
 
+			void draw();
+			
 			Vec2 getPos() const;
 			
 			float getRadius() const;
