@@ -37,7 +37,11 @@ void build_examples(nb_arr *cmd) {
         "-I./includes", "-L./lib",
         "-l:libbyteframe.a", "-lraylib", "-O3");
     nb_cmd(cmd);
-}
+    nb_append_da(cmd, 
+                 "g++", "./examples/snake.cpp", "-o", "snake", "-I./includes", "-L./lib", "-l:libbyteframe.a", "-lraylib", "-O3"
+                 );
+    nb_cmd(cmd);
+}   
 
 int main(int argc, char **argv) {
     float time_begin = nb_time();
