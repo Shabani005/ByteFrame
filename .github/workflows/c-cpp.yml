@@ -13,19 +13,32 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install raylib and dependencies
+      - name: Install build dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
             build-essential \
-            libraylib-dev \
+            cmake \
+            git \
             libx11-dev \
             libxcursor-dev \
             libxrandr-dev \
             libxinerama-dev \
             libxi-dev \
             libgl1-mesa-dev \
-            libglu1-mesa-dev
+            libglu1-mesa-dev \
+            libasound2-dev \
+            libpthread-stubs0-dev
+
+      - name: Build and install raylib from source
+        run: |
+          git clone https://github.com/raysan5/raylib.git
+          cd raylib
+          mkdir build && cd build
+          cmake -DBUILD_SHARED_LIBS=ON -DPLATFORM=Desktop ..
+          make -j$(nproc)
+          sudo make install
+          cd ../..
 
       - name: Build program
         run: cc -o builder builder.c -lraylib -lm -lpthread -ldl -lrt -lGL -lX11
